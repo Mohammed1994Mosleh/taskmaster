@@ -17,3 +17,14 @@
 ![](./screenshots/Alltasks.jpg)
 
    - Disply all tasks
+
+4. Settings
+
+   - User can add username that display in Home page
+
+   ![](./screenshots/taskdetail.jpg)
+
+5. Taskdetail
+   ![](./screenshots/settings.jpg)
+   - Contain Tile and description of task
+
