@@ -6,8 +6,10 @@
 1. Home :
 ![](./screenshots/Homapage.jpg)
 
-   - Contains 2 Buttons that links to another activites (Addtask,Alltasks)
-
+   - Refactor your homepage to use a RecyclerView for displaying Task data. This should have hardcoded Task data for now.
+   - Create a TaskAdapter class that displays data from a list of Tasks.
+   - In your MainActivity, create at least three hardcoded Task instances and use those to populate your RecyclerView/ViewAdapter.
+   
 2. Addtask:
 ![](./screenshots/AddTask.jpg)
 
