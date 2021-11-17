@@ -1,5 +1,7 @@
 package com.example.taskmaster;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,37 +13,59 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewholder> {
+public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder> {
 
-    List<TaskModel> allTasks=new ArrayList<TaskModel>();
+    List<Task> allTasks = new ArrayList<Task>();
+    private static  RecyclerViewClickListener recyclerViewClickListener;
+
+
+    public TaskAdapter(List<Task> allTasks , RecyclerViewClickListener recyclerViewClickListener) {
+        this.allTasks = allTasks;
+        this.recyclerViewClickListener = recyclerViewClickListener;
+
+    }
+
+    public TaskAdapter(List<Task> allTasks) {
+    }
 
     @NonNull
     @Override
-    public TaskViewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_task,parent,false);
-        TaskViewholder taskViewholder=new TaskViewholder(view);
+    public TaskViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        return taskViewholder;
-    }
-
-    public TaskAdapter(List<TaskModel> allTasks) {
-        this.allTasks = allTasks;
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_blank,parent,false);
+        TaskViewHolder taskViewHolder = new TaskViewHolder(view);
+        return taskViewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TaskViewholder holder, int position) {
-        holder.taskModel=allTasks.get(position);
-
-        TextView taskTitle=holder.itemVIew.findViewById(R.id.titleTextView);
-        TextView taskBody=holder.itemVIew.findViewById(R.id.bodyTextView);
-        TextView taskState=holder.itemVIew.findViewById(R.id.stateTextView);
-
-        taskTitle.setText(holder.taskModel.title);
-        taskBody.setText(holder.taskModel.body);
-        taskState.setText(holder.taskModel.state);
+    public void onBindViewHolder(@NonNull TaskViewHolder holder, int position) {
+        holder.task = allTasks.get(position);
 
 
-      //  studentName.setText(holder.taskModel.);
+        TextView title = holder.itemView.findViewById(R.id.fragTitle);
+        TextView body = holder.itemView.findViewById(R.id.fragBody);
+        TextView state = holder.itemView.findViewById(R.id.fragStatus);
+
+        title.setText(holder.task.getTitle());
+        body.setText(holder.task.getBody());
+        state.setText(holder.task.getState());
+
+//db
+        String titleToHandle = title.getText().toString();
+        String descToHandle = body.getText().toString();
+        String statetodaaaamn = state.getText().toString();
+
+        title.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(v.getContext(),MainActivity4.class);
+                i.putExtra("taskTitle", titleToHandle);
+                i.putExtra("desc", descToHandle);
+                i.putExtra("state", statetodaaaamn);
+
+                v.getContext().startActivity(i);
+            }
+        });
 
     }
 
@@ -50,14 +74,25 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewholder
         return allTasks.size();
     }
 
-    public static class TaskViewholder extends RecyclerView.ViewHolder{
-        public TaskModel taskModel;
-        public View itemVIew;
+    public static class TaskViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
+        public  Task task;
+        public View itemView;
 
-        public TaskViewholder(@NonNull View itemView) {
+        public TaskViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.itemVIew=itemView;
+            this.itemView = itemView;
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View view) {
+            recyclerViewClickListener.onClick(view,getAdapterPosition());
+
+        }
+    }
+
+    public interface RecyclerViewClickListener{
+        void onClick(View v ,int position);
     }
 }
