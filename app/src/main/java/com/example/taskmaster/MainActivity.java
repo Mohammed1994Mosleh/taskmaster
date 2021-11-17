@@ -6,172 +6,134 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
-
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    List<Task> allTasks = new ArrayList<Task>();
+    TaskRoomDatabase taskRoomDatabase;
+    private TaskAdapter.RecyclerViewClickListener recyclerViewClickListener;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        List<TaskModel> tasktoViewd=new ArrayList<>();
-        tasktoViewd.add(new TaskModel("traininng","at 6am","complete"));
-        tasktoViewd.add(new TaskModel("Buy bread","7Am","assigned"));
-        tasktoViewd.add(new TaskModel("solve Homeworks","now","in progress"));
-
-        RecyclerView recyclerView=findViewById(R.id.allTasksView);
-
-        LinearLayoutManager manager=new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(manager);
-        recyclerView.setAdapter(new TaskAdapter(MainActivity.this,tasktoViewd));
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        taskRoomDatabase =  TaskRoomDatabase.getData(this);
+
+//        allTasks.add(new Task("math","solve it","new"));
+//        allTasks.add(new Task("english","solved","complete"));
+//        allTasks.add(new Task("arabic","fix it","in progress"));
 
 
+        Button goToActivityTwo = findViewById(R.id.addTaskBtn);
+        Button goToActivityThree = findViewById(R.id.allTasksBtn);
+//        Button task1 = findViewById(R.id.newTitle);
+//        Button task2 = findViewById(R.id.task2btn);
+//        Button task3 = findViewById(R.id.task3btn);
+        Button settingPage = findViewById(R.id.settingbtn);
 
-         ////
-        Button nextPage1=findViewById(R.id.next1);
-        nextPage1.setOnClickListener(new View.OnClickListener() {
+//        setOnClickListener();
+
+        AsyncTask.execute(new Runnable() {
             @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(),"Navigate to Add task",Toast.LENGTH_LONG).show();
-                // navigate to Addtask
-                Intent goToAddtask=new Intent(MainActivity.this,AddTask.class);
-                startActivity(goToAddtask);
+            public void run() {
+                allTasks = taskRoomDatabase.taskDao().getAll();
+                System.out.println(allTasks);
+                RecyclerView recyclerView = findViewById(R.id.recycleId);
+                recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+                recyclerView.setAdapter(new TaskAdapter(allTasks,recyclerViewClickListener));
             }
         });
-//        ////All Tasks
-        Button allTasks=findViewById(R.id.button2);
-        allTasks.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(),"Navigate to All tasks",Toast.LENGTH_LONG).show();
-                //navigate to All tasks
-                Intent goToAddtask=new Intent(MainActivity.this,AllTasks.class);
-                startActivity(goToAddtask);
 
+
+
+
+        goToActivityTwo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent goToActivityTwoIntent = new Intent(MainActivity.this,MainActivity2.class);
+                startActivity(goToActivityTwoIntent);
             }
         });
 
+        goToActivityThree.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent goToActivityThreeIntent = new Intent(MainActivity.this,MainActivity3.class);
+                startActivity(goToActivityThreeIntent);
+            }
+        });
 
-//        Button deatils1=findViewById(R.id.Title1);
-//        deatils1.setOnClickListener(new View.OnClickListener() {
+//        task1.setOnClickListener(new View.OnClickListener() {
 //            @Override
-//            public void onClick(View v) {
-//                Intent goToAddtask=new Intent(MainActivity.this,Taskdetail.class);
-//                goToAddtask.putExtra("title1","title1");
-//                startActivity(goToAddtask);
-//
+//            public void onClick(View view) {
+//                Intent taskOneIntent = new Intent(MainActivity.this, MainActivity4.class);
+//                taskOneIntent.putExtra("title", "Task1");
+//                startActivity(taskOneIntent);
 //            }
 //        });
 //
-//        Button deatils2=findViewById(R.id.Title2);
-//        deatils2.setOnClickListener(new View.OnClickListener() {
+//        task2.setOnClickListener(new View.OnClickListener() {
 //            @Override
-//            public void onClick(View v) {
-//                Intent goToAddtask=new Intent(MainActivity.this,Taskdetail.class);
-//                goToAddtask.putExtra("title1","title2");
-//                startActivity(goToAddtask);
-//
+//            public void onClick(View view) {
+//                Intent taskTwoIntent = new Intent(MainActivity.this, MainActivity4.class);
+//                taskTwoIntent.putExtra("title", "Task2");
+//                startActivity(taskTwoIntent);
 //            }
 //        });
 //
-//        Button deatils3=findViewById(R.id.Title3);
-//        deatils3.setOnClickListener(new View.OnClickListener() {
+//        task3.setOnClickListener(new View.OnClickListener() {
 //            @Override
-//            public void onClick(View v) {
-//                Intent goToAddtask=new Intent(MainActivity.this,Taskdetail.class);
-//                goToAddtask.putExtra("title1","title3");
-//                startActivity(goToAddtask);
-//
+//            public void onClick(View view) {
+//                Intent taskThreeIntent = new Intent(MainActivity.this, MainActivity4.class);
+//                taskThreeIntent.putExtra("title", "Task3");
+//                startActivity(taskThreeIntent);
 //            }
 //        });
 
-
-
-
-
-
-
-        Button settingPage=findViewById(R.id.setting);
         settingPage.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Intent gotoSetting=new Intent(MainActivity.this,Settings.class);
-                startActivity(gotoSetting);
+            public void onClick(View view) {
+                Intent goToSettingPage = new Intent(MainActivity.this, MainActivity5.class);
+                startActivity(goToSettingPage);
             }
         });
 
-
-
-
-
-
-
     }
 
+    private void setOnClickListener() {
+        recyclerViewClickListener = new TaskAdapter.RecyclerViewClickListener() {
+            @Override
+            public void onClick(View v, int position) {
+                Intent intent = new Intent(getApplicationContext(),MainActivity4.class);
+                intent.putExtra("title",allTasks.get(position).getTitle());
+//                intent.putExtra("body",allTasks.get(position).getBody());
+//                intent.putExtra("state",allTasks.get(position).getState());
 
-    ///////////////Test///////////
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Toast.makeText(getApplicationContext(), "onStart Called", Toast.LENGTH_LONG).show();
+                startActivity(intent);
+            }
+        };
     }
 
-    // Called when the activity has become visible.
     @Override
     protected void onResume() {
         super.onResume();
-        Toast.makeText(getApplicationContext(), "onResume Called", Toast.LENGTH_LONG).show();
-        SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-        String userName = sharedPreferences.getString("username","the user didn't add a name yet!");
-        TextView userNametext=findViewById(R.id.textUser);
-        userNametext.setText(userName);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        String name = sharedPreferences.getString("usernameInput", "Balqees");
+        TextView textView = findViewById(R.id.userInput);
+        textView.setText(name);
+
+
 
     }
-
-    // Called when another activity is taking focus.
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Toast.makeText(getApplicationContext(), "onPause Called", Toast.LENGTH_LONG).show();
-    }
-
-    // Called when the activity is no longer visible.
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Toast.makeText(getApplicationContext(), "onStop Called", Toast.LENGTH_LONG).show();
-    }
-
-
-    //It is invoked after the activity has been stopped and prior to its starting stage.
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        Toast.makeText(getApplicationContext(), "onRestart Called", Toast.LENGTH_LONG).show();
-    }
-
-    // Called just before the activity is destroyed.
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Toast.makeText(getApplicationContext(), "onDestroy Called", Toast.LENGTH_LONG).show();
-    }
-
-
-
-
-
 }

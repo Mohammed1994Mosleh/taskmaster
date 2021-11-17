@@ -10,10 +10,10 @@ import android.view.ViewGroup;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link fragment_task#newInstance} factory method to
+ * Use the {@link BlankFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class fragment_task extends Fragment {
+public class BlankFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -21,11 +21,14 @@ public class fragment_task extends Fragment {
     private static final String ARG_PARAM2 = "body";
     private static final String ARG_PARAM3 = "state";
 
+
     // TODO: Rename and change types of parameters
     private String mTitle;
     private String mBody;
     private String mState;
-    public fragment_task() {
+
+
+    public BlankFragment() {
         // Required empty public constructor
     }
 
@@ -35,16 +38,17 @@ public class fragment_task extends Fragment {
      *
      * @param mTitle Parameter 1.
      * @param mBody Parameter 2.
-     *   @param mState Parameter 3.
-     * @return A new instance of fragment fragment_task.
+     * @param mState Parameter 3.
+     * @return A new instance of fragment BlankFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static fragment_task newInstance(String mTitle, String mBody,String mState) {
-        fragment_task fragment = new fragment_task();
+    public static BlankFragment newInstance(String mTitle, String mBody, String mState ) {
+        BlankFragment fragment = new BlankFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, mTitle);
         args.putString(ARG_PARAM2, mBody);
         args.putString(ARG_PARAM3, mState);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -56,6 +60,7 @@ public class fragment_task extends Fragment {
             mTitle = getArguments().getString(ARG_PARAM1);
             mBody = getArguments().getString(ARG_PARAM2);
             mState = getArguments().getString(ARG_PARAM3);
+
         }
     }
 
@@ -63,6 +68,6 @@ public class fragment_task extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_task, container, false);
+        return inflater.inflate(R.layout.fragment_blank, container, false);
     }
 }
