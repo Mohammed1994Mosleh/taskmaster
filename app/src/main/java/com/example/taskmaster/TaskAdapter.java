@@ -24,7 +24,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewholder
         return taskViewholder;
     }
 
-    public TaskAdapter(List<TaskModel> allTasks) {
+    public TaskAdapter(MainActivity mainActivity, List<TaskModel> allTasks) {
         this.allTasks = allTasks;
     }
 

@@ -22,14 +22,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        List<TaskModel> tasktoViewd=new ArrayList<TaskModel>();
+        List<TaskModel> tasktoViewd=new ArrayList<>();
         tasktoViewd.add(new TaskModel("traininng","at 6am","complete"));
         tasktoViewd.add(new TaskModel("Buy bread","7Am","assigned"));
         tasktoViewd.add(new TaskModel("solve Homeworks","now","in progress"));
 
         RecyclerView recyclerView=findViewById(R.id.allTasksView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new TaskAdapter(tasktoViewd));
+
+        LinearLayoutManager manager=new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(manager);
+        recyclerView.setAdapter(new TaskAdapter(MainActivity.this,tasktoViewd));
 
 
         super.onCreate(savedInstanceState);
@@ -49,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(goToAddtask);
             }
         });
-        ////All Tasks
+//        ////All Tasks
         Button allTasks=findViewById(R.id.button2);
         allTasks.setOnClickListener(new View.OnClickListener() {
             @Override

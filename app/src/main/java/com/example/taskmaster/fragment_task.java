@@ -10,10 +10,10 @@ import android.view.ViewGroup;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link TaskFragment#newInstance} factory method to
+ * Use the {@link fragment_task#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TaskFragment extends Fragment {
+public class fragment_task extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -25,9 +25,7 @@ public class TaskFragment extends Fragment {
     private String mTitle;
     private String mBody;
     private String mState;
-
-
-    public TaskFragment() {
+    public fragment_task() {
         // Required empty public constructor
     }
 
@@ -37,16 +35,16 @@ public class TaskFragment extends Fragment {
      *
      * @param mTitle Parameter 1.
      * @param mBody Parameter 2.
-     * @param mState Parameter 2.
-     * @return A new instance of fragment TaskFragment.
+     *   @param mState Parameter 3.
+     * @return A new instance of fragment fragment_task.
      */
     // TODO: Rename and change types and number of parameters
-    public static TaskFragment newInstance(String mTitle, String mBody,String mState) {
-        TaskFragment fragment = new TaskFragment();
+    public static fragment_task newInstance(String mTitle, String mBody,String mState) {
+        fragment_task fragment = new fragment_task();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, mTitle);
         args.putString(ARG_PARAM2, mBody);
-        args.putString(ARG_PARAM3,mState);
+        args.putString(ARG_PARAM3, mState);
         fragment.setArguments(args);
         return fragment;
     }
