@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -22,6 +23,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+
+
+
+
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
         List<TaskModel> tasktoViewd=new ArrayList<>();
         tasktoViewd.add(new TaskModel("traininng","at 6am","complete"));
         tasktoViewd.add(new TaskModel("Buy bread","7Am","assigned"));
@@ -29,18 +36,14 @@ public class MainActivity extends AppCompatActivity {
 
         RecyclerView recyclerView=findViewById(R.id.allTasksView);
 
-        LinearLayoutManager manager=new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(manager);
-        recyclerView.setAdapter(new TaskAdapter(MainActivity.this,tasktoViewd));
-
-
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(new TaskAdapter(tasktoViewd));
 
 
 
 
-         ////
+
+        ////
         Button nextPage1=findViewById(R.id.next1);
         nextPage1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,17 +55,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 //        ////All Tasks
-        Button allTasks=findViewById(R.id.button2);
-        allTasks.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(),"Navigate to All tasks",Toast.LENGTH_LONG).show();
-                //navigate to All tasks
-                Intent goToAddtask=new Intent(MainActivity.this,AllTasks.class);
-                startActivity(goToAddtask);
-
-            }
-        });
+//        Button allTasks=findViewById(R.id.button2);
+//        allTasks.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(getApplicationContext(),"Navigate to All tasks",Toast.LENGTH_LONG).show();
+//                //navigate to All tasks
+//                Intent goToAddtask=new Intent(MainActivity.this,AllTasks.class);
+//                startActivity(goToAddtask);
+//
+//            }
+//        });
 
 
 //        Button deatils1=findViewById(R.id.Title1);
@@ -112,7 +115,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(gotoSetting);
             }
         });
-
 
 
 

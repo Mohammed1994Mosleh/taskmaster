@@ -21,11 +21,11 @@ public class TaskFragment extends Fragment {
     private static final String ARG_PARAM2 = "body";
     private static final String ARG_PARAM3 = "state";
 
+
     // TODO: Rename and change types of parameters
     private String mTitle;
     private String mBody;
     private String mState;
-
 
     public TaskFragment() {
         // Required empty public constructor
@@ -37,7 +37,7 @@ public class TaskFragment extends Fragment {
      *
      * @param mTitle Parameter 1.
      * @param mBody Parameter 2.
-     * @param mState Parameter 2.
+     *   @param mState Parameter 3.
      * @return A new instance of fragment TaskFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -46,7 +46,7 @@ public class TaskFragment extends Fragment {
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, mTitle);
         args.putString(ARG_PARAM2, mBody);
-        args.putString(ARG_PARAM3,mState);
+        args.putString(ARG_PARAM3, mState);
         fragment.setArguments(args);
         return fragment;
     }
