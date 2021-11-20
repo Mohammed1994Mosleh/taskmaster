@@ -23,7 +23,7 @@ public class Taskdetail extends AppCompatActivity {
 
 
         TextView title=findViewById(R.id.taskdetail);
-        String titleFromhome = getIntent().getExtras().get("title1").toString();
+        String titleFromhome = getIntent().getExtras().get("taskTitle").toString();
         title.setText(titleFromhome);
     }
 }
