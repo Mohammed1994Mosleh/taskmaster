@@ -30,3 +30,15 @@
    ![](./screenshots/settings.jpg)
    - Contain Tile and description of task
 
+
+
+## lab 32 :
+
+- Update Main activity
+
+![](./screenshots/mainaws.jpg)
+
+- Update Taskdetail activity
+![](./screenshots/awsdet.jpg)
+
+

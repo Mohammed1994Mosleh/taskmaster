@@ -29,12 +29,14 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.amplifyframework.datastore.generated.model.Task;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewholder> {
 
-    List<TaskModel> allTasks=new ArrayList<TaskModel>();
+    List<Task> allTasks=new ArrayList<Task>();
 
     @NonNull
     @Override
@@ -44,7 +46,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewholder
         return taskViewholder;
     }
 
-    public TaskAdapter( List<TaskModel> allTasks) {
+    public TaskAdapter( List<Task> allTasks) {
         this.allTasks = allTasks;
     }
 
@@ -61,15 +63,19 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewholder
             @Override
             public void onClick(View view) {
                 String taskTitle=holder.taskModel.getTitle();
+                String taskDes=holder.taskModel.getBody();
+                String taskStatus=holder.taskModel.getState();
                 Intent goToDetailsPage=new Intent(view.getContext(),Taskdetail.class);
                 goToDetailsPage.putExtra("taskTitle",taskTitle);
+                goToDetailsPage.putExtra("taskDes",taskDes);
+                goToDetailsPage.putExtra("taskStatus",taskStatus);
                 view.getContext().startActivity(goToDetailsPage);
             }
         });
 
-        taskTitle.setText(holder.taskModel.title);
-        taskBody.setText(holder.taskModel.body);
-        taskState.setText(holder.taskModel.state);
+        taskTitle.setText(holder.taskModel.getTitle());
+        taskBody.setText(holder.taskModel.getBody());
+        taskState.setText(holder.taskModel.getState());
 
 
       //  studentName.setText(holder.taskModel.);
@@ -82,7 +88,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewholder
     }
 
     public static class TaskViewholder extends RecyclerView.ViewHolder{
-        public TaskModel taskModel;
+        public Task taskModel;
         public View itemVIew;
 
 
