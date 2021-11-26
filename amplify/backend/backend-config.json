@@ -1,0 +1,21 @@
+{
+  "api": {
+    "taskmaster": {
+      "service": "AppSync",
+      "providerPlugin": "awscloudformation",
+      "output": {
+        "authConfig": {
+          "defaultAuthentication": {
+            "authenticationType": "API_KEY",
+            "apiKeyConfig": {
+              "apiKeyExpirationDays": 30,
+              "apiKeyExpirationDate": "2021-12-26T17:02:11.247Z",
+              "description": "'description'"
+            }
+          },
+          "additionalAuthenticationProviders": []
+        }
+      }
+    }
+  }
+}
