@@ -24,9 +24,11 @@ import android.widget.Toast;
 
 import com.amplifyframework.AmplifyException;
 import com.amplifyframework.api.aws.AWSApiPlugin;
+import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Task;
+import com.amplifyframework.datastore.generated.model.Team;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +36,8 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     // AppDatabase taskDatabase;
+    String teamId="";
+
 
 
     @Override
@@ -41,25 +45,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        List<TaskModel> tasktoViewd2=new ArrayList<>();
-//        tasktoViewd2.add(new TaskModel("traininng","at 6am","complete"));
-//        tasktoViewd2.add(new TaskModel("Buy bread","7Am","assigned"));
-//        tasktoViewd2.add(new TaskModel("solve Homeworks","now","in progress"));
-
-//        taskDatabase=AppDatabase.getInstance(this);
-//        tasktoViewd = taskDatabase.userDao().getAll();
-
-//        AsyncTask.execute(new Runnable() {
-//            @Override
-//            public void run() {
-//
-//
-//            }
-//        });
-
-        // aws amplifier
         try {
-            // Add these lines to add the AWSApiPlugin plugins
             Amplify.addPlugin(new AWSApiPlugin());
             Amplify.configure(getApplicationContext());
 
@@ -67,40 +53,63 @@ public class MainActivity extends AppCompatActivity {
         } catch (AmplifyException error) {
             Log.e("MyAmplifyApp", "Could not initialize Amplify", error);
         }
-        RecyclerView recyclerView = findViewById(R.id.allTasksView);
 
-        Handler newHandler=new Handler(Looper.getMainLooper(), new Handler.Callback() {
-            @Override
-            public boolean handleMessage(@NonNull Message message) {
-                recyclerView.getAdapter().notifyDataSetChanged();
-                return false;
-            }
-        });
+//
 
-        List<Task> tasktoViewd=new ArrayList<>();
-        Amplify.API.query(
-                ModelQuery.list(Task.class),
-                response -> {
-
-                    Log.i("MyAmplifyApp",response.toString());
-                    for (Task taskModel : response.getData()) {
-                        tasktoViewd.add(taskModel);
-                    }
-                    newHandler.sendEmptyMessage(3);
-
-                },
-                error -> Log.e("MyAmplifyApp", "Query failure", error)
-        );
+        // aws amplifier
 
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
-        recyclerView.setAdapter(new TaskAdapter(tasktoViewd));
+        //Get Id from SharedPrefrence
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+         teamId = sharedPreferences.getString("teamId", "");
+
+
+        if(! teamId.equals("")){
+            Log.i("hello", teamId);
+            RecyclerView recyclerView = findViewById(R.id.allTasksView);
+            Handler newHandler=new Handler(Looper.getMainLooper(), new Handler.Callback() {
+                @Override
+                public boolean handleMessage(@NonNull Message message) {
+                    recyclerView.getAdapter().notifyDataSetChanged();
+                    return false;
+                }
+            });
 
 
 
+            List<Task> tasktoViewd=new ArrayList<>();
+            Amplify.API.query(
+                    ModelQuery.get(Team.class,teamId),
+                    response -> {
+
+                        Log.i("MyAmplifyApp",response.toString());
+                        for (Task taskModel : response.getData().getTasks()) {
+                            tasktoViewd.add(taskModel);
+                            Log.i("taskkssss",taskModel.toString());
+                        }
+                        newHandler.sendEmptyMessage(3);
+
+                    },
+                    error -> Log.e("MyAmplifyApp", "Query failure", error)
+            );
 
 
-        ////
+            recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+            recyclerView.setAdapter(new TaskAdapter(tasktoViewd));
+        }
+
+
+
+
+
+
+
+
+
+
+
+        //// Add Task Button
         Button nextPage1=findViewById(R.id.next1);
         nextPage1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,12 +132,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-
-
-
-
-
 
 
 
@@ -160,11 +163,63 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        //UserNmae
         Toast.makeText(getApplicationContext(), "onResume Called", Toast.LENGTH_LONG).show();
         SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         String userName = sharedPreferences.getString("username","the user didn't add a name yet!");
         TextView userNametext=findViewById(R.id.textUser);
         userNametext.setText(userName);
+
+        //team
+        String temaNAme=sharedPreferences.getString("teamName","NO team");
+        TextView teamNmaeViwer=findViewById(R.id.teamName);
+        teamNmaeViwer.setText(temaNAme);
+
+        teamId = sharedPreferences.getString("teamId", "");
+
+        // tasks
+
+        if(! teamId.equals("")){
+            Log.i("hello", teamId);
+            RecyclerView recyclerView = findViewById(R.id.allTasksView);
+            Handler newHandler=new Handler(Looper.getMainLooper(), new Handler.Callback() {
+                @Override
+                public boolean handleMessage(@NonNull Message message) {
+                    recyclerView.getAdapter().notifyDataSetChanged();
+                    return false;
+                }
+            });
+
+
+
+            List<Task> tasktoViewd=new ArrayList<>();
+            Amplify.API.query(
+                    ModelQuery.get(Team.class,teamId),
+                    response -> {
+
+                        Log.i("MyAmplifyApp",response.toString());
+                        for (Task taskModel : response.getData().getTasks()) {
+                            tasktoViewd.add(taskModel);
+                            Log.i("taskkssss",taskModel.toString());
+                        }
+                        newHandler.sendEmptyMessage(3);
+
+                    },
+                    error -> Log.e("MyAmplifyApp", "Query failure", error)
+            );
+
+
+            recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+            recyclerView.setAdapter(new TaskAdapter(tasktoViewd));
+        }
+
+
+
+
+
+
+
 
     }
 
@@ -196,8 +251,6 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         Toast.makeText(getApplicationContext(), "onDestroy Called", Toast.LENGTH_LONG).show();
     }
-
-
 
 
 
