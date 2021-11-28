@@ -6,8 +6,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 
@@ -17,9 +20,10 @@ import com.amplifyframework.datastore.generated.model.Task;
 
 import java.util.List;
 
-public class AddTask extends AppCompatActivity {
+public class AddTask extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     //public AppDatabase taskDatabase;
+    String string="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +35,15 @@ public class AddTask extends AppCompatActivity {
         EditText taskDecrep=findViewById(R.id.descreption);
         EditText taskState=findViewById(R.id.state);
         Button addTask=findViewById(R.id.submitAdd);
+
+        //Spinner
+        Spinner newSpiner=findViewById(R.id.spinner);
+        ArrayAdapter<CharSequence> adapter=ArrayAdapter.createFromResource(this,R.array.hello,android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        newSpiner.setAdapter(adapter);
+        newSpiner.setOnItemSelectedListener(this);
+
+
 
         addTask.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,6 +62,7 @@ public class AddTask extends AppCompatActivity {
                         .body(taskDcrep)
                         .state(stateTas)
                         .build();
+
 
                 Amplify.API.mutate(
                         ModelMutation.create(taskModel),
@@ -76,6 +90,20 @@ public class AddTask extends AppCompatActivity {
         });
 
 
+
+
+
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+         string=adapterView.getItemAtPosition(i).toString();
+        Toast.makeText(getApplicationContext(), string, Toast.LENGTH_LONG).show();
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
 
     }
 }
