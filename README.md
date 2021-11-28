@@ -42,3 +42,16 @@
 ![](./screenshots/awsdet.jpg)
 
 
+## Lab 33: Related Data
+
+- Create a second entity for a team, which has a name and a list of tasks. Update your tasks to be owned by a team.
+![](./screenshots/lab33-1.jpg)
+
+
+- Add  Spinner for which team that task belongs to in Addtask activity.
+![](./screenshots/lab33-2.jpg)
+
+- allow the user to choose their team on the Settings page.through spinner.
+![](./screenshots/lab33-3.jpg)
+
+
