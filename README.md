@@ -54,4 +54,12 @@
 - allow the user to choose their team on the Settings page.through spinner.
 ![](./screenshots/lab33-3.jpg)
 
+## lab 36: Cognito
+
+- user login and sign up flows to the application, using Cognito’s pre-built UI as appropriate.
+![](./screenshots/auth.jpg)
+
+![](./screenshots/auth1.jpg)
+
+
 

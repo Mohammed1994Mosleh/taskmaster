@@ -76,7 +76,8 @@ public class Settings extends AppCompatActivity implements AdapterView.OnItemSel
                 sharedPreferences.edit().putString("username",userName).apply();
                 sharedPreferences.edit().putString("teamName",stringSetting).apply();
                 sharedPreferences.edit().putString("teamId", teamList.get(stringSetting)).apply();
-                Toast.makeText(getApplicationContext(), stringSetting, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), teamList.get(stringSetting), Toast.LENGTH_LONG).show();
+               // Toast.makeText(getApplicationContext(), stringSetting, Toast.LENGTH_LONG).show();
 
             }
         });
