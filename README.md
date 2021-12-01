@@ -62,4 +62,11 @@
 ![](./screenshots/auth1.jpg)
 
 
+## Lab 37 : S3 Uploads
+
+- Update Addtask to allow users to optionally select a file to attach to that task. If a user attaches a file to a task, that file should be uploaded to S3, and associated with that task.
+
+![](./screenshots/lab371.jpg)
+![](./screenshots/lab37.jpg)
+
 
