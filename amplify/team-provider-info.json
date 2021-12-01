@@ -26,7 +26,8 @@
     },
     "categories": {
       "auth": {
-        "taskmastercba6ff56": {}
+        "taskmastercba6ff56": {},
+        "true": {}
       }
     }
   }

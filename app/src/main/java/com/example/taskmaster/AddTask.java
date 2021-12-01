@@ -1,7 +1,10 @@
 package com.example.taskmaster;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +25,11 @@ import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Task;
 import com.amplifyframework.datastore.generated.model.Team;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,6 +37,9 @@ public class AddTask extends AppCompatActivity implements AdapterView.OnItemSele
 
     //public AppDatabase taskDatabase;
     String string="";
+    private String imgName;
+    private Uri imgData;
+    private Intent chooseFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +60,19 @@ public class AddTask extends AppCompatActivity implements AdapterView.OnItemSele
         adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         newSpiner.setAdapter(adapter);
         newSpiner.setOnItemSelectedListener(this);
+
+        // Upload image
+
+        Button uploadImage=findViewById(R.id.upload);
+        uploadImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
+                chooseFile.setType("*/*");
+                chooseFile = Intent.createChooser(chooseFile, "Choose a file");
+                startActivityForResult(chooseFile, 1234);
+            }
+        });
 
 
         // get All Teams
@@ -81,6 +105,20 @@ public class AddTask extends AppCompatActivity implements AdapterView.OnItemSele
             @Override
             public void onClick(View view) {
 
+                if (imgData != null) {
+                    try {
+                        InputStream exampleInputStream = getContentResolver().openInputStream(imgData);
+                        Amplify.Storage.uploadInputStream(
+                                imgName,
+                                exampleInputStream,
+                                result -> Log.i("MyAmplifyApp", "Successfully uploaded: " + result.getKey()),
+                                storageFailure -> Log.e("MyAmplifyApp", "Upload failed", storageFailure)
+                        );
+                    } catch (FileNotFoundException error) {
+                        Log.e("MyAmplifyApp", "Could not find file to open for input stream.", error);
+                    }
+                }
+
                 String myTitel1 = taskTitle.getText().toString();
                 String taskDcrep = taskDecrep.getText().toString();
                 String stateTas = taskState.getText().toString();
@@ -112,6 +150,7 @@ public class AddTask extends AppCompatActivity implements AdapterView.OnItemSele
                                     .body(taskDcrep)
                                     .state(stateTas)
                                     .team(response1.getData())
+                                    .fileKey(imgName)
                                     .build();
 
                             Amplify.API.mutate(
@@ -152,5 +191,13 @@ public class AddTask extends AppCompatActivity implements AdapterView.OnItemSele
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        File file = new File(data.getData().getPath());
+        imgName = file.getName();
+        imgData = data.getData();
     }
 }

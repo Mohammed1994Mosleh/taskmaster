@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,10 +66,13 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewholder
                 String taskTitle=holder.taskModel.getTitle();
                 String taskDes=holder.taskModel.getBody();
                 String taskStatus=holder.taskModel.getState();
+                String image= holder.taskModel.getFileKey();
                 Intent goToDetailsPage=new Intent(view.getContext(),Taskdetail.class);
                 goToDetailsPage.putExtra("taskTitle",taskTitle);
                 goToDetailsPage.putExtra("taskDes",taskDes);
+                goToDetailsPage.putExtra("taskImage",image);
                 goToDetailsPage.putExtra("taskStatus",taskStatus);
+
                 view.getContext().startActivity(goToDetailsPage);
             }
         });
